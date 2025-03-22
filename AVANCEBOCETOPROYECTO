@@ -1,0 +1,39 @@
+#include<iostream>
+///////BOCETO MENU PROYECTO
+using namespace std;
+int main (){
+    int opcion;
+    cout<<"                      ***************************************";
+    cout<<"\n\n                         Bienvenido a Despega tu vuelo↨☼\n\n";
+    cout<<"                      ***************************************\n\n";
+    cout<<"A continuacion elija la opcion que desea relizar\n\n";
+    cout<<"1. Asignar una silla a un pasajero\n\n";
+    cout<<"2. Consultar una reserva\n\n";
+    cout<<"3. Eliminar reserva\n\n";
+    cout<<"4. Buscar pasajero\n\n";
+    cout<<"5. Calcular el porcentaje de ocupación del avión\n\n";
+    cout<<"6.Consultar el valor total de ventas .\n\n";
+    cout<<"7. Consultar el valor promedio de venta por concepto de sllas.\n\n";
+ 
+
+    cin>>opcion;
+    
+    
+    switch(opcion){
+        case 1: cout<<"Posiciones disponibles";
+        break;
+        case 2: cout<<"Asigne la silla al pasajero";
+        break;
+        case 3: cout<<"Ingrese el numero de su reserva";
+        break;
+        case 4: cout<<"Elimine el numero para eliminar la reserva";
+        break;
+        case 5: cout<<"El porcentaje de ocupacion es:";
+        break;
+        case 6: cout<<"El valor total de ventas es";
+        break;
+        case 7: cout<<"Ventas por sillas";
+        break;
+        default: cout<<"no existe la opcion seleccionada";
+    }
+}

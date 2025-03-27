@@ -1,0 +1,54 @@
+
+#include<iostream>
+///////BOCETO MENU PROYECTO
+using namespace std;
+int main () {
+	int opcion;
+	cout<<"                      ***************************************";
+	cout<<"\n\n                         Bienvenido a Despega tu vuelob(b<\n\n";
+	cout<<"                      ***************************************\n\n";
+
+
+
+	do {
+		cout<<"A continuacion elija la opcion que desea relizar\n\n";
+		cout<<"1. Asignar una silla a un pasajero\n\n";
+		cout<<"2. Consultar una reserva\n\n";
+		cout<<"3. Eliminar reserva\n\n";
+		cout<<"4. Buscar pasajero\n\n";
+		cout<<"5. Calcular el porcentaje de ocupaciC3n del aviC3n\n\n";
+		cout<<"6.Consultar el valor total de ventas .\n\n";
+		cout<<"7. Consultar el valor promedio de venta por concepto de sillas.\n\n";
+		cout<<"8. Salir\n\n";
+		cin>>opcion;
+
+		switch(opcion) {
+		case 1:
+			cout<<"***Posiciones disponibles***\n\n";
+			break;
+		case 2:
+			cout<<"***Asigne la silla al pasajero***\n\n";
+			break;
+		case 3:
+			cout<<"***Ingrese el numero de su reserva***\n\n";
+			break;
+		case 4:
+			cout<<"***Elimine el numero para eliminar la reserva***\n\n";
+			break;
+		case 5:
+			cout<<"***El porcentaje de ocupacion es:***\n\n";
+			break;
+		case 6:
+			cout<<"***El valor total de ventas es***\n\n";
+			break;
+		case 7:
+			cout<<"***Ventas por sillas***\n\n";
+			break;
+		default:
+			cout<<"***no existe la opcion seleccionada***\n\n";
+		case 8: cout<<"Gracias por usar nuestra aplicacion";
+		break;
+		}
+
+	} while(opcion!=8);
+}

@@ -1,0 +1,34 @@
+//// USO STRUCT Y FOR PARA REGISTRO CLIENTES AEROLINEA
+
+#include <iostream>
+using namespace std;
+
+struct cliente {
+    
+    string nom , ape , cor;
+    int long cont , cc;
+  
+};
+
+int main() {
+	int a;
+	int i;
+	cout<<"ingrese la cantidad de clientes que desea registrar en la aerolinea: ";
+	cin>>a;
+	cliente usuarios[a];
+	for(i=0; i<a; i++) {
+		cout<<"\n*** Cliente "<<i+1<<" ***";
+		cout<<"\nNombre: ";
+		cin>>usuarios[i].nom;
+		cout<<"\nApellido: ";
+		cin>>usuarios[i].ape;
+		cout<<"\nCedula:";
+		cin>>usuarios[i].cc;
+		cout<<"\nContacto:";
+		cin>>usuarios[i].cont;
+		cout<<"\nCorreo:";
+		cin>>usuarios[i].cor;
+		cout<<"\n\n¡Usuario registrado exitosamente!";
+		
+	}
+}

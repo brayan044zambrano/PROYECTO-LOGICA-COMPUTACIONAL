@@ -1,0 +1,275 @@
+#include <iostream>
+using namespace std;
+#include <cstdlib>
+
+
+struct Pasajero {
+    string nombre;
+    int cedula;
+    string correo;
+    string clase;
+    long tel;
+    string posicion;
+    float valor_silla;
+    bool ocupado = false;
+};
+
+Pasajero pasajeros[50];
+int total_pasajeros = 0;
+
+// MATRIZ DE ASIENTOS
+const int filas = 10;
+const int columnas = 9;
+char matriz[filas][columnas];
+char letras[] = {'A', 'B', ' ', 'C', 'D', 'E', ' ', 'F', 'G'};
+
+// Inicializar matriz con pasillos y asientos
+void inicializarMatriz() {
+    system("clear");
+    int asientoActual = 0;
+    for (int i = 0; i < filas; ++i) {
+        for (int j = 0; j < columnas; ++j) {
+            if (j == 2 || j == 6) {
+                matriz[i][j] = ' '; // pasillos
+            } else if (asientoActual < 50) {
+                matriz[i][j] = 'O'; // asiento libre
+                asientoActual++;
+            } else {
+                matriz[i][j] = ' '; // visualmente vacío
+            }
+        }
+    }
+}
+
+// Mostrar matriz de sillas
+void mostrarMapaSillas() {
+    system("clear");
+    cout << "\n     ";
+    for (int j = 0; j < columnas; ++j) {
+        cout << letras[j] << " ";
+    }
+    cout << "\n";
+
+    for (int i = 0; i < filas; ++i) {
+        if (i + 1 < 10) cout << " ";
+        cout << i + 1 << " | ";
+        for (int j = 0; j < columnas; ++j) {
+            cout << matriz[i][j] << " ";
+        }
+        cout << "\n";
+        
+    }
+}
+
+// Buscar si una silla está ocupada
+bool estaOcupado(int fila, int columna) {
+    return matriz[fila][columna] == 'X';
+}
+
+// Convertir columna en letra a índice
+int letraAIndice(char letra) {
+    for (int i = 0; i < columnas; i++) {
+        if (letras[i] == letra) return i;
+    }
+    return 0;
+}
+
+void asignarSilla() {
+    system("clear");
+    if (total_pasajeros >= 50) {
+        cout << "No hay más sillas disponibles.\n";
+        return;
+    }
+
+    mostrarMapaSillas();
+
+    cout << "\n*** Asignar una silla ***\n";
+    cout << "Nombre : ";
+    cin >> pasajeros[total_pasajeros].nombre;
+    cout << "Correo: ";
+    cin >> pasajeros[total_pasajeros].correo;
+    cout << "Cédula: ";
+    cin >> pasajeros[total_pasajeros].cedula;
+    cout << "Tel: ";
+    cin >> pasajeros[total_pasajeros].tel;
+    cout << "Clase (Ejecutiva o Economica): ";
+    cin >> pasajeros[total_pasajeros].clase;
+    cout << "Posición preferida (Ventana, Pasillo";
+    if (pasajeros[total_pasajeros].clase == "Economica") cout << ", Centro";
+    cout << "): ";
+    cin >> pasajeros[total_pasajeros].posicion;
+
+    if (pasajeros[total_pasajeros].clase == "Ejecutiva" && pasajeros[total_pasajeros].posicion == "Centro") {
+        cout << "Error: En clase Ejecutiva no existe la posición Centro.\n";
+        return;
+    }
+
+    // Selección de silla exacta
+    int fila;
+    char letra;
+    cout << "Ingrese fila (1-8): ";
+    cin >> fila;
+    cout << "Ingrese letra del asiento en mayuscula (A-G): ";
+    cin >> letra;
+    int col = letraAIndice(letra);
+
+    if (fila < 1 || fila > 10 || col == -1 || matriz[fila - 1][col] == ' ' || matriz[fila - 1][col] == 'X') {
+        cout << "Asiento inválido o ya ocupado.\n";
+        return;
+        
+    }
+
+    matriz[fila - 1][col] = 'X'; // marcar como ocupado
+
+if (pasajeros[total_pasajeros].clase == "Ejecutiva") {
+    pasajeros[total_pasajeros].valor_silla = 250000;
+} else {
+    pasajeros[total_pasajeros].valor_silla = 50000;
+}
+
+pasajeros[total_pasajeros].ocupado = true;
+pasajeros[total_pasajeros].posicion = to_string(fila) + letras[col];
+total_pasajeros++;
+
+    cout << "Reserva registrada.\n";
+    system("clear");
+}
+
+void consultarReserva() {
+    system("clear");
+    int cedula;
+    int menu;
+    cout << "\nIngrese la cédula para consultar: ";
+    cin >> cedula;
+    bool encontrado = false;
+    for (int i = 0; i < total_pasajeros; i++) {
+        if (pasajeros[i].cedula == cedula) {
+            cout << "\nReserva encontrada:\n";
+            cout << "Nombre: " << pasajeros[i].nombre << endl;
+            cout << "Clase: " << pasajeros[i].clase << endl;
+            cout << "Posición: " << pasajeros[i].posicion << endl;
+            cout << "Teléfono: " << pasajeros[i].tel << endl;
+            cout << "Correo: " << pasajeros[i].correo << endl;
+            cout<<endl<<"1.Salir\n";
+            cin>>menu;
+            if(menu==1){
+                system("clear");
+            }
+            encontrado = true;
+            break;
+        }
+    }
+    if (!encontrado) {
+        cout << "No se encontró ninguna reserva.\n";
+    }
+}
+
+void eliminarReserva() {
+      system("clear");
+    int cedula;
+    cout << "\nIngrese la cédula para eliminar reserva: ";
+    cin >> cedula;
+    for (int i = 0; i < total_pasajeros; i++) {
+        if (pasajeros[i].cedula == cedula) {
+            // Liberar la silla en la matriz
+            int fila = stoi(pasajeros[i].posicion.substr(0, pasajeros[i].posicion.size() - 1)) - 1;
+            char letra = pasajeros[i].posicion.back();
+            int col = letraAIndice(letra);
+            if (fila >= 0 && fila < 10 && col >= 0 && col < 9) {
+                matriz[fila][col] = 'O';
+            }
+            for (int j = i; j < total_pasajeros - 1; j++) {
+                pasajeros[j] = pasajeros[j + 1];
+            }
+            total_pasajeros--;
+            cout << "Reserva eliminada.\n";
+            return;
+             
+        }
+    }
+    cout << "No se encontró la reserva.\n";
+      system("clear");
+}
+
+void buscarPasajero() {
+    int cedula;
+    cout << "\nIngrese la cédula para buscar pasajero: ";
+    cin >> cedula;
+    for (int i = 0; i < total_pasajeros; i++) {
+        if (pasajeros[i].cedula == cedula) {
+            cout << "\nPasajero encontrado:\n";
+            cout << "Nombre: " << pasajeros[i].nombre << endl;
+            cout << "Clase: " << pasajeros[i].clase << endl;
+            cout << "Posición: " << pasajeros[i].posicion << endl;
+            return;
+        }
+    }
+    cout << "Pasajero no encontrado.\n";
+}
+
+void calcularOcupacion() {
+    system("clear");
+    float porcentaje = (float)total_pasajeros / 50 * 100;
+    cout << "\nPorcentaje de ocupación del avión: " << porcentaje << "%\n";
+}
+
+void valorTotalVentas() {
+    system("clear");
+    float total = 0;
+    for (int i = 0; i < total_pasajeros; i++) {
+        total += pasajeros[i].valor_silla;
+    }
+    cout << "\nValor total de ventas: $" << total << endl;
+}
+
+void valorPromedioVenta() {
+    system("clear");
+    if (total_pasajeros == 0) {
+        cout << "\nNo hay ventas registradas.\n";
+        return;
+    }
+    float total = 0;
+    for (int i = 0; i < total_pasajeros; i++) {
+        total += pasajeros[i].valor_silla;
+    }
+    cout << "\nValor promedio por pasajero: $" << total / total_pasajeros << endl;
+}
+
+int main() {
+    inicializarMatriz();
+    int opcion;
+    do {
+        cout << "\n\n  _______________________________________\n";
+        cout << "  º      Bienvenido a Despega tu vuelo  º\n";
+        cout << "  _______________________________________\n\n";
+
+        cout << "   A continuación, elija la opción:\n";
+        cout << "     1. Asignar una silla a un pasajero.\n";
+        cout << "     2. Consultar una reserva.\n";
+        cout << "     3. Eliminar reserva.\n";
+        cout << "     4. Buscar pasajero.\n";
+        cout << "     5. Calcular el porcentaje de ocupación del avión.\n";
+        cout << "     6. Consultar el valor total de ventas.\n";
+        cout << "     7. Consultar el valor promedio de venta por pasajero.\n";
+        cout << "     8. Mostrar mapa de asientos.\n";
+        cout << "     9. Salir\n\n";
+        cout << "Seleccione una opción: ";
+        cin >> opcion;
+
+        switch (opcion) {
+            case 1: asignarSilla(); break;
+            case 2: consultarReserva(); break;
+            case 3: eliminarReserva(); break;
+            case 4: buscarPasajero(); break;
+            case 5: calcularOcupacion(); break;
+            case 6: valorTotalVentas(); break;
+            case 7: valorPromedioVenta(); break;
+            case 8: mostrarMapaSillas(); break;
+            case 9: cout << "Gracias por usar la aplicación.\n"; break;
+            default: cout << "Opción no válida.\n";
+        }
+
+    } while (opcion != 9);
+
+    return 0;
+}
